@@ -57,25 +57,25 @@ export function CreateScheduleWizard({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Context Bar */}
-      <div className="flex items-center gap-10 px-8 py-2.5 bg-white border-b border-slate-100 shrink-0 text-sm shadow-sm z-10 w-full overflow-x-auto">
-        <div className="flex items-center gap-2 min-w-max">
-          <span className="text-slate-400 text-[11px] font-bold uppercase tracking-wider">Client:</span>
-          <span className="font-semibold text-slate-800 text-[13px]">Stüssy</span>
+      <div className="flex items-center gap-4 px-8 py-2.5 bg-slate-50/80 border-b border-slate-200 shrink-0 text-sm shadow-sm z-10 w-full overflow-x-auto">
+        <div className="flex items-center gap-1.5 min-w-max">
+          <span className="text-slate-500 text-[12px] font-semibold uppercase tracking-wider">Client:</span>
+          <span className="font-bold text-slate-900 text-[13px]">Stüssy</span>
         </div>
-        <div className="w-1 h-1 rounded-full bg-slate-200" />
-        <div className="flex items-center gap-2 min-w-max">
-          <span className="text-slate-400 text-[11px] font-bold uppercase tracking-wider">Year:</span>
-          <span className="font-semibold text-slate-800 text-[13px]">2026</span>
+        <div className="w-[3px] h-[3px] rounded-full bg-slate-300 mx-2" />
+        <div className="flex items-center gap-1.5 min-w-max">
+          <span className="text-slate-500 text-[12px] font-semibold uppercase tracking-wider">Year:</span>
+          <span className="font-bold text-slate-900 text-[13px]">2026</span>
         </div>
-        <div className="w-1 h-1 rounded-full bg-slate-200" />
-        <div className="flex items-center gap-2 min-w-max">
-          <span className="text-slate-400 text-[11px] font-bold uppercase tracking-wider">Module:</span>
-          <span className="font-semibold text-slate-800 text-[13px]">Contractor / Monthly Payment</span>
+        <div className="w-[3px] h-[3px] rounded-full bg-slate-300 mx-2" />
+        <div className="flex items-center gap-1.5 min-w-max">
+          <span className="text-slate-500 text-[12px] font-semibold uppercase tracking-wider">Module:</span>
+          <span className="font-bold text-slate-900 text-[13px]">Contractor / Monthly Payment</span>
         </div>
-        <div className="w-1 h-1 rounded-full bg-slate-200" />
-        <div className="flex items-center gap-2 min-w-max">
-          <span className="text-slate-400 text-[11px] font-bold uppercase tracking-wider">Time Zone:</span>
-          <span className="font-semibold text-slate-800 text-[13px]">(GMT+07:00) Asia/Jakarta</span>
+        <div className="w-[3px] h-[3px] rounded-full bg-slate-300 mx-2" />
+        <div className="flex items-center gap-1.5 min-w-max">
+          <span className="text-slate-500 text-[12px] font-semibold uppercase tracking-wider">Time Zone:</span>
+          <span className="font-bold text-slate-900 text-[13px]">(GMT+07:00) Asia/Jakarta</span>
         </div>
       </div>
 
@@ -85,33 +85,36 @@ export function CreateScheduleWizard({ onBack }: { onBack: () => void }) {
         <div className="w-[280px] bg-[#f8fafc] border-r border-slate-200 py-8 px-6 overflow-y-auto custom-scrollbar shrink-0 flex flex-col">
           <div className="flex flex-col flex-1 relative z-0 pl-2">
              {/* Vertical connecting line */}
-             <div className="absolute left-[17px] top-6 bottom-10 w-[2px] bg-slate-200 -z-10" />
+             <div className="absolute left-[15px] top-6 bottom-10 w-[2px] bg-slate-200 -z-10" />
 
              {STEPS.map((step) => {
                const isActive = currentStep === step.id;
                const isCompleted = currentStep > step.id;
                
                return (
-                 <div key={step.id} className="relative pb-8 last:pb-0 group">
+                 <div key={step.id} className="relative pb-[38px] last:pb-0 group">
                    <div className="flex items-start gap-4">
+                      {/* Circle Indicator */}
                       <div className={cn(
-                        "w-[22px] h-[22px] mt-0.5 rounded-full flex items-center justify-center shrink-0 text-[11px] font-bold transition-all relative z-10",
-                        isCompleted ? "bg-blue-600 text-white shadow-sm ring-4 ring-[#f8fafc]" : 
-                        isActive ? "bg-white border-2 border-blue-600 text-blue-600 shadow-sm ring-4 ring-[#f8fafc]" : 
-                        "bg-white border-2 border-slate-200 text-slate-400 ring-4 ring-[#f8fafc]"
+                        "w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-[13px] font-bold transition-all relative z-10",
+                        isCompleted ? "bg-[#0052cc] text-white shadow-sm ring-8 ring-[#f8fafc]" : 
+                        isActive ? "bg-white border-2 border-[#0052cc] text-[#0052cc] shadow-sm ring-8 ring-[#f8fafc]" : 
+                        "bg-[#f0f3f6] text-slate-500 ring-8 ring-[#f8fafc]"
                       )}>
-                         {isCompleted ? <CheckCircle2 className="w-3.5 h-3.5 text-white" /> : step.id}
+                         {step.id}
                       </div>
-                      <div className="flex flex-col pt-0.5 cursor-default">
+
+                      {/* Text */}
+                      <div className="flex flex-col pt-1.5 cursor-default">
                          <span className={cn(
-                            "text-[13.5px] font-semibold transition-colors", 
-                            isActive ? "text-slate-900" : isCompleted ? "text-slate-700" : "text-slate-400 group-hover:text-slate-600"
+                            "text-[14px] font-bold transition-colors leading-none tracking-tight", 
+                            isActive ? "text-slate-900" : isCompleted ? "text-slate-700" : "text-slate-400 group-hover:text-slate-500"
                          )}>
                             {step.title}
                          </span>
                          <span className={cn(
-                            "text-[12px] mt-1 transition-colors leading-snug",
-                            isActive ? "text-slate-500" : "text-slate-400 opacity-60"
+                            "text-[12px] mt-1.5 transition-colors leading-snug font-medium",
+                            isActive ? "text-slate-500" : isCompleted ? "text-slate-400" : "text-slate-400 opacity-70"
                          )}>{step.desc}</span>
                       </div>
                    </div>

@@ -1,156 +1,181 @@
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
-import { Info, Calendar as CalendarIcon, X, ChevronDown, ArrowRight } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Info, Calendar as CalendarIcon, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
+const ALL_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
 export function PhWkndRulesStep() {
-  const [configType, setConfigType] = useState<"default" | "custom">("custom");
+  const [configType, setConfigType] = useState<"default" | "custom">("default");
   const [selectedLocations, setSelectedLocations] = useState(["BIPO SD (Processor) Location", "Client Company Location"]);
+  const [workingDays, setWorkingDays] = useState(['Mon', 'Tue', 'Wed', 'Thu', 'Fri']);
+
+  const toggleDay = (day: string) => {
+    if (workingDays.includes(day)) {
+      setWorkingDays(workingDays.filter(d => d !== day));
+    } else {
+      setWorkingDays([...workingDays, day].sort((a, b) => ALL_DAYS.indexOf(a) - ALL_DAYS.indexOf(b)));
+    }
+  };
+
+  const weekendDays = ALL_DAYS.filter(d => !workingDays.includes(d));
 
   return (
-    <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-       <div>
-         <h2 className="text-xl font-bold text-slate-900 tracking-tight mb-1.5">PH & WKND Rules</h2>
-         <p className="text-[14px] text-slate-500">Define working days, weekend, and holidays for this schedule.</p>
-       </div>
+    <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      
+       {/* PH & WKND Rules Card */}
+       <div className="flex flex-col bg-white border border-slate-100 shadow-sm rounded-xl p-8">
+           {/* Header */}
+           <div className="flex items-center justify-between mb-8">
+               <h2 className="text-[24px] font-bold text-slate-700 tracking-tight">PH & WKND Rules</h2>
+               <div className="flex items-center gap-3">
+                   <div className="h-[34px] px-3.5 bg-indigo-50 text-indigo-600 border border-indigo-100 rounded-md flex items-center justify-center text-[13px] font-medium">
+                       Matches 2 Locations
+                   </div>
+                   <Button variant="outline" className="h-[34px] border-slate-200 text-slate-800 font-bold gap-2 text-[13px] shadow-sm hover:bg-slate-50">
+                       <CalendarIcon className="w-4 h-4" /> Preview Holidays
+                   </Button>
+               </div>
+           </div>
 
-       {/* Configuration Type Cards */}
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl">
-           {/* Default Rule Card */}
-           <div 
-             className={cn(
-                "p-5 rounded-lg border cursor-pointer transition-all flex items-start gap-3",
-                configType === "default" ? "border-blue-600 ring-1 ring-blue-600 bg-blue-50/30" : "border-slate-200 hover:border-slate-300 bg-white shadow-sm"
-             )}
-             onClick={() => setConfigType("default")}
-           >
-              <div className="pt-[3px]">
-                  <div className={cn(
-                      "w-[18px] h-[18px] rounded-full border-2 flex items-center justify-center transition-colors",
-                      configType === "default" ? "border-blue-600" : "border-slate-300"
-                  )}>
-                      {configType === "default" && <div className="w-[8px] h-[8px] bg-blue-600 rounded-full" />}
-                  </div>
+           {/* Radio Toggle */}
+           <div className="flex items-center gap-8 mb-8">
+              <div 
+                className="flex items-center gap-2 cursor-pointer group"
+                onClick={() => setConfigType("default")}
+              >
+                 <div className={cn(
+                     "w-4 h-4 rounded-full border-[1.5px] flex items-center justify-center transition-colors shadow-sm",
+                     configType === "default" ? "border-blue-600" : "border-slate-300 group-hover:border-blue-400"
+                 )}>
+                     {configType === "default" && <div className="w-2 h-2 rounded-full bg-blue-600" />}
+                 </div>
+                 <span className={cn("text-[14px]", configType === "default" ? "text-slate-600 mb-0.5" : "text-slate-500 mb-0.5")}>Use Business Default Rule</span>
               </div>
-              <div className="flex flex-col">
-                  <span className={cn("font-bold text-[14px] mb-1", configType === "default" ? "text-slate-900" : "text-slate-700")}>Use Business Default Rule</span>
-                  <span className="text-[13px] text-slate-500 leading-relaxed">Apply system default working days and holidays</span>
+              
+              <div 
+                className="flex items-center gap-2 cursor-pointer group"
+                onClick={() => setConfigType("custom")}
+              >
+                 <div className={cn(
+                     "w-4 h-4 rounded-full border-[1.5px] flex items-center justify-center transition-colors shadow-sm",
+                     configType === "custom" ? "border-blue-600" : "border-slate-300 group-hover:border-blue-400"
+                 )}>
+                     {configType === "custom" && <div className="w-2 h-2 rounded-full bg-blue-600" />}
+                 </div>
+                 <span className={cn("text-[14px]", configType === "custom" ? "text-blue-600 mb-0.5" : "text-slate-500 mb-0.5")}>Custom Configuration</span>
               </div>
            </div>
 
-           {/* Custom Configuration Card */}
-           <div 
-             className={cn(
-                "p-5 rounded-lg border cursor-pointer transition-all flex items-start gap-3",
-                configType === "custom" ? "border-blue-600 ring-1 ring-blue-600 bg-blue-50/30" : "border-slate-200 hover:border-slate-300 bg-white shadow-sm"
-             )}
-             onClick={() => setConfigType("custom")}
-           >
-              <div className="pt-[3px]">
-                  <div className={cn(
-                      "w-[18px] h-[18px] rounded-full border-2 flex items-center justify-center transition-colors",
-                      configType === "custom" ? "border-blue-600" : "border-slate-300"
-                  )}>
-                      {configType === "custom" && <div className="w-[8px] h-[8px] bg-blue-600 rounded-full" />}
-                  </div>
-              </div>
-              <div className="flex flex-col">
-                  <span className={cn("font-bold text-[14px] mb-1", configType === "custom" ? "text-blue-700" : "text-slate-700")}>Custom Configuration</span>
-                  <span className="text-[13px] text-slate-500 leading-relaxed">Define custom PH & WKND rules for this schedule</span>
-              </div>
+           {/* Content Area */}
+           <div className="flex flex-col w-full">
+               {configType === "default" ? (
+                   <div className="bg-slate-50/80 rounded-lg p-6 flex flex-col gap-3">
+                       <div className="flex items-start gap-2.5">
+                           <div className="w-[18px] h-[18px] bg-blue-600 rounded-full flex items-center justify-center text-white font-serif italic text-[12px] shrink-0 mt-0.5 shadow-sm">
+                               i
+                           </div>
+                           <div className="flex flex-col gap-1.5">
+                               <span className="font-medium text-slate-800 text-[14px]">Current Business Default</span>
+                               <span className="text-[13px] text-slate-500">The following locations are automatically applied based on your Service Module selection.</span>
+                           </div>
+                       </div>
+                       <div className="flex flex-wrap gap-2 pl-[28px] mt-1">
+                           <div className="bg-blue-50 border border-blue-100 text-blue-600 text-[13px] px-3 py-1 rounded bg-opacity-70">Project Location</div>
+                           <div className="bg-blue-50 border border-blue-100 text-blue-600 text-[13px] px-3 py-1 rounded bg-opacity-70">Client Contact(Processor) Location</div>
+                           <div className="bg-blue-50 border border-blue-100 text-blue-600 text-[13px] px-3 py-1 rounded bg-opacity-70">BIPO SD (Processor) Location</div>
+                       </div>
+                   </div>
+               ) : (
+                   <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                       {/* Custom Locations Selector */}
+                       <div className="flex flex-col gap-2.5">
+                           <Label className="text-[14px] font-medium text-slate-900 flex items-center gap-1.5">
+                               Use PH & WKND for the following locations
+                               <div className="w-3.5 h-3.5 bg-blue-600 rounded-full flex items-center justify-center text-white font-serif italic text-[9px] shrink-0 shadow-sm">
+                                   i
+                               </div>
+                           </Label>
+                           <div className="min-h-[44px] flex items-center flex-wrap gap-2 p-1.5 border border-slate-200 rounded-md bg-white relative pr-10 shadow-sm w-full">
+                               {selectedLocations.map(loc => (
+                                  <div key={loc} className="flex items-center gap-1.5 bg-slate-100 text-slate-400 text-[13px] px-3 py-1.5 rounded font-medium">
+                                     {loc}
+                                  </div>
+                               ))}
+                               {selectedLocations.length === 0 && <span className="text-[13px] text-slate-400 pl-2">Select locations...</span>}
+                               <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                           </div>
+                       </div>
+
+                       {/* Custom Working Days */}
+                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4 border-t border-slate-100 mt-2">
+                         <div className="flex flex-col gap-3.5">
+                            <div className="flex items-baseline gap-2">
+                                <Label className="text-[15px] font-bold text-[#334155]">Working Days</Label>
+                                <span className="text-[14px] text-[#94a3b8]">(Click to adjust)</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                               {workingDays.map(day => (
+                                  <div 
+                                     key={day} 
+                                     onClick={() => toggleDay(day)}
+                                     className="w-[52px] h-[36px] rounded bg-[#2563eb] text-white flex items-center justify-center text-[14px] font-semibold shadow-sm cursor-pointer hover:bg-blue-700 transition-colors"
+                                  >
+                                     {day}
+                                  </div>
+                               ))}
+                               {workingDays.length === 0 && <span className="text-[13px] text-slate-400 italic">No working days</span>}
+                            </div>
+                         </div>
+                         <div className="flex flex-col gap-3.5">
+                            <div className="flex items-baseline gap-2">
+                                <Label className="text-[15px] font-bold text-[#334155]">Weekend Days</Label>
+                            </div>
+                            <div className="flex items-center gap-2">
+                               {weekendDays.map(day => (
+                                  <div 
+                                     key={day} 
+                                     onClick={() => toggleDay(day)}
+                                     className="w-[52px] h-[36px] rounded bg-[#f1f5f9] border border-slate-200 text-[#475569] flex items-center justify-center text-[14px] font-semibold cursor-pointer hover:bg-slate-200 transition-colors"
+                                  >
+                                     {day}
+                                  </div>
+                               ))}
+                               {weekendDays.length === 0 && <span className="text-[13px] text-slate-400 italic">No weekend days</span>}
+                            </div>
+                         </div>
+                       </div>
+                   </div>
+               )}
            </div>
        </div>
 
-       {configType === "custom" && (
-         <div className="flex flex-col gap-8 bg-white border border-slate-200 shadow-sm rounded-lg p-7 max-w-4xl">
-            {/* Locations */}
-            <div className="flex flex-col gap-3">
-                <Label className="text-[13px] font-semibold text-slate-700 flex items-center gap-1.5">
-                    Use PH & WKND for the following location(s) <Info className="w-4 h-4 text-slate-400" />
-                </Label>
-                <div className="min-h-[42px] flex items-center flex-wrap gap-2 p-1.5 border border-slate-300 rounded-md bg-white relative pr-10 shadow-sm">
-                    {selectedLocations.map(loc => (
-                       <div key={loc} className="flex items-center gap-1.5 bg-slate-100 text-slate-700 text-[13px] px-2.5 py-1 rounded border border-slate-200/60 font-medium">
-                          {loc}
-                          <X className="w-3.5 h-3.5 text-slate-400 hover:text-slate-600 cursor-pointer" />
-                       </div>
-                    ))}
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                </div>
-            </div>
+       {/* Processor Section */}
+       <div className="flex flex-col bg-white border border-slate-100 shadow-sm rounded-xl p-8 w-full animate-in fade-in slide-in-from-bottom-2 duration-500 delay-150">
+           <div className="flex flex-col gap-1.5 mb-6">
+               <h3 className="text-[18px] font-bold text-slate-800">Processor</h3>
+           </div>
+           
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+               {/* Client Contact Processor */}
+               <div className="flex flex-col gap-2.5">
+                   <Label className="text-[13px] font-semibold text-slate-700">Client Contact (Local/Processor)</Label>
+                   <div className="h-[42px] bg-[#fafafa] border border-slate-200/80 rounded-md px-3.5 flex items-center text-[13px] text-slate-500 font-medium cursor-not-allowed">
+                       Client-Nancy小号
+                   </div>
+               </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                {/* Working Days */}
-                <div className="flex flex-col gap-3">
-                    <Label className="text-[13px] font-semibold text-slate-700">Working Days</Label>
-                    <div className="flex items-center gap-2">
-                        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map(day => (
-                            <div key={day} className="w-[42px] h-[34px] rounded bg-blue-600 text-white flex items-center justify-center text-[13px] font-medium shadow-sm">
-                               {day}
-                            </div>
-                        ))}
-                    </div>
-                </div>
+               {/* BIPO SD Processor */}
+               <div className="flex flex-col gap-2.5">
+                   <Label className="text-[13px] font-semibold text-slate-700">BIPO SD (Local/Processor)</Label>
+                   <div className="h-[42px] bg-[#fafafa] border border-slate-200/80 rounded-md px-3.5 flex items-center text-[13px] text-slate-500 font-medium cursor-not-allowed">
+                       SD-Nancy Pan
+                   </div>
+               </div>
+           </div>
+       </div>
 
-                {/* Weekend Days */}
-                <div className="flex flex-col gap-3">
-                    <Label className="text-[13px] font-semibold text-slate-700">Weekend Days</Label>
-                    <div className="flex items-center gap-2">
-                        {['Sat', 'Sun'].map(day => (
-                            <div key={day} className="w-[42px] h-[34px] rounded bg-slate-100 text-slate-500 flex items-center justify-center text-[13px] font-medium border border-slate-200">
-                               {day}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* Holidays Table */}
-            <div className="flex flex-col gap-3 pt-4 border-t border-slate-100 mt-2">
-                <div className="flex items-center justify-between mb-2">
-                    <div className="flex flex-col">
-                       <Label className="font-semibold text-slate-900 text-[15px]">Holidays</Label>
-                       <div className="flex items-center gap-1.5 text-[13px] text-blue-600 font-medium mt-1">
-                           <CalendarIcon className="w-3.5 h-3.5" />
-                           2 holidays configured for 2026
-                       </div>
-                    </div>
-                    <Button variant="outline" className="h-9 border-slate-300 text-slate-700 font-medium gap-2 text-[13px] shadow-sm">
-                        <CalendarIcon className="w-4 h-4" /> Manage Holidays
-                    </Button>
-                </div>
-                
-                <div className="border border-slate-200 rounded-lg overflow-hidden bg-white">
-                    <Table>
-                        <TableHeader className="bg-slate-50 border-b border-slate-200">
-                            <TableRow className="hover:bg-transparent">
-                                <TableHead className="w-[300px] font-semibold text-slate-700 text-[13px] h-10">Date</TableHead>
-                                <TableHead className="font-semibold text-slate-700 text-[13px] h-10">Holiday Name</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow className="border-b border-slate-100">
-                                <TableCell className="font-medium text-slate-800 text-[13px] py-3">Jan 1, 2026</TableCell>
-                                <TableCell className="text-slate-600 text-[13px] py-3">New Year's Day</TableCell>
-                            </TableRow>
-                            <TableRow className="border-none">
-                                <TableCell className="font-medium text-slate-800 text-[13px] py-3">Feb 17, 2026</TableCell>
-                                <TableCell className="text-slate-600 text-[13px] py-3">Hari Raya Nyepi</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                    <div className="p-2 border-t border-slate-100 text-center bg-slate-50/50">
-                        <button className="text-blue-600 text-[13px] font-medium inline-flex items-center gap-1 hover:underline">
-                            View All <ArrowRight className="w-3h-3" />
-                        </button>
-                    </div>
-                </div>
-            </div>
-         </div>
-       )}
     </div>
   )
 }

@@ -23,30 +23,30 @@ export function BenchmarkDatesStep() {
     <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
        <div className="flex items-start justify-between">
            <div>
-             <h2 className="text-xl font-bold text-slate-900 tracking-tight mb-1.5">Benchmark Dates</h2>
-             <p className="text-[14px] text-slate-500">Set the monthly benchmark dates for this schedule.</p>
+             <h2 className="text-[24px] font-bold text-slate-900 tracking-tight mb-2">Benchmark Dates</h2>
+             <p className="text-[14px] text-slate-500 font-medium">Set the monthly benchmark dates for this schedule.</p>
            </div>
            <div className="flex items-center gap-3">
-               <Button variant="outline" className="border-slate-300 text-slate-700 font-medium text-[13px] h-9">Clear All</Button>
-               <Button variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-medium bg-white text-[13px] h-9">Add Benchmark Date</Button>
+               <Button variant="outline" className="border-slate-300 text-slate-700 font-semibold text-[13px] h-9">Clear All</Button>
+               <Button variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-semibold bg-white text-[13px] h-9">Add Benchmark Date</Button>
            </div>
        </div>
 
-       <div className="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm mt-2 max-w-4xl">
-            <Table>
-                <TableHeader className="bg-slate-50 border-b border-slate-200">
-                    <TableRow className="hover:bg-transparent">
-                        <TableHead className="w-[350px] font-semibold text-slate-700 py-3 text-[13px] pl-6">Benchmark Month</TableHead>
-                        <TableHead className="font-semibold text-slate-700 py-3 text-[13px]">Benchmark Date</TableHead>
+       <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm mt-2 max-w-4xl">
+            <Table className="min-w-max">
+                <TableHeader className="bg-white">
+                    <TableRow className="border-b border-slate-200 hover:bg-transparent">
+                        <TableHead className="w-[350px] font-semibold text-slate-900 py-4 text-[13px] pl-8">Benchmark Month</TableHead>
+                        <TableHead className="font-semibold text-slate-900 py-4 text-[13px]">Benchmark Date</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {MONTHS.map((col, idx) => (
                         <TableRow key={idx} className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors">
-                            <TableCell className="font-medium text-slate-800 py-3 pl-6 text-[13px]">
+                            <TableCell className="font-semibold text-slate-900 py-4 pl-8 text-[13px]">
                                 {col.name}
                             </TableCell>
-                            <TableCell className="py-3">
+                            <TableCell className="py-4">
                                 <div className="flex justify-between items-center pr-6">
                                     {col.date ? (
                                         <div className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-medium text-[13px] border border-emerald-200 shadow-sm">
