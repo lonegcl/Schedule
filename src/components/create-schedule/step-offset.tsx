@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Info, Calendar as CalendarIcon } from "lucide-react";
+import type { ReactNode } from "react";
+import { Info, Calendar as CalendarIcon, ClipboardList, FileText, Send } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
@@ -111,14 +112,23 @@ export function OffsetSettingsStep() {
   return (
     <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
        <div>
-         <h2 className="text-[24px] font-bold text-slate-900 tracking-tight mb-2">Offset Due Date Settings</h2>
-         <p className="text-[14px] text-slate-500 font-medium">Configure the due date rules for each task in this schedule.</p>
+         <h2 className="text-[24px] font-bold text-slate-900 tracking-tight mb-2">Task Rules</h2>
+         <p className="text-[14px] text-slate-500 font-medium">Configure invoice collection, due dates, and reminders for tasks created by this schedule.</p>
        </div>
 
+       <section className="grid grid-cols-1 gap-3 md:grid-cols-3">
+          <RuleOverview href="#task-settings" icon={<ClipboardList className="h-4 w-4" />} title="Task Settings" description="5 workflow tasks with due date and reminder rules" />
+          <RuleOverview href="#auto-request" icon={<Send className="h-4 w-4" />} title="Auto Placing Request" description="Request timing based on first task due date" />
+          <RuleOverview href="#invoice-collection" icon={<FileText className="h-4 w-4" />} title="Invoice Collection" description="Automated collection enabled" />
+       </section>
+
        {/* Task Settings Card */}
-       <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col mt-2 overflow-hidden">
+       <div id="task-settings" className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col mt-2 overflow-hidden scroll-mt-24">
            <div className="px-6 py-5 border-b border-slate-100">
               <h3 className="font-bold text-slate-900 text-[16px]">Task Settings</h3>
+              <p className="mt-1 text-[13px] leading-relaxed text-slate-500">
+                 Benchmark task is the anchor date. Other task due dates are calculated from offset rules.
+              </p>
            </div>
            
            <div className="overflow-x-auto custom-scrollbar">
@@ -212,10 +222,12 @@ export function OffsetSettingsStep() {
        </div>
 
        {/* Auto Placing Request Settings */}
-       <div className="bg-white rounded-xl border border-blue-100 shadow-[0_4px_20px_rgba(37,99,235,0.03)] flex flex-col overflow-hidden relative">
-           <div className="absolute top-0 left-0 w-1 h-full bg-blue-500" />
-           <div className="px-6 py-5 border-b border-blue-50">
+       <div id="auto-request" className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col overflow-hidden scroll-mt-24">
+           <div className="px-6 py-5 border-b border-slate-100">
               <h3 className="font-bold text-slate-900 flex items-center gap-1.5 text-[16px]">Auto Placing Request Settings <Info className="w-4 h-4 text-blue-500" /></h3>
+              <p className="mt-1 text-[13px] leading-relaxed text-slate-500">
+                 This request date is calculated from the first task due date.
+              </p>
            </div>
            
            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -252,6 +264,50 @@ export function OffsetSettingsStep() {
            </div>
        </div>
 
+       <div id="invoice-collection" className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden scroll-mt-24">
+           <div className="px-6 py-5 border-b border-slate-100">
+              <h3 className="font-bold text-slate-900 flex items-center gap-1.5 text-[16px]">Invoice Collection <Info className="w-4 h-4 text-blue-500" /></h3>
+              <p className="mt-1 text-[13px] leading-relaxed text-slate-500">
+                 Decide whether this schedule should create invoice collection requests before payment review tasks.
+              </p>
+           </div>
+
+           <div className="p-6 flex flex-col gap-5">
+              <div className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+                 <div>
+                    <div className="text-[13px] font-bold text-slate-900">Automated collection</div>
+                    <p className="mt-1 max-w-[760px] text-[13px] leading-relaxed text-slate-600">
+                       Include invoice collection requests for included contractors when task rules run.
+                    </p>
+                 </div>
+                 <Switch defaultChecked className="data-[state=checked]:bg-blue-600 shrink-0" id="invoice-automated" />
+              </div>
+
+              <div className="space-y-2.5">
+                 <Label className="text-[13px] font-semibold text-slate-600">Internal Remarks (Optional)</Label>
+                 <div className="relative">
+                    <textarea
+                       placeholder="Add notes for the schedule owner..."
+                       className="min-h-[88px] w-full resize-y rounded-md border border-slate-200 bg-slate-50/50 p-3 text-[13px] text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    />
+                    <span className="absolute bottom-3 right-3 text-[11px] font-medium text-slate-400">0 / 2000</span>
+                 </div>
+              </div>
+           </div>
+       </div>
+
     </div>
   )
+}
+
+function RuleOverview({ href, icon, title, description }: { href: string; icon: ReactNode; title: string; description: string }) {
+  return (
+    <a href={href} className="rounded-lg border border-slate-200 bg-slate-50/60 px-4 py-3 transition-colors hover:border-blue-200 hover:bg-blue-50/70">
+      <div className="flex items-center gap-2 text-[13px] font-bold text-slate-900">
+        <span className="text-blue-600">{icon}</span>
+        {title}
+      </div>
+      <p className="mt-1 text-[12px] leading-relaxed text-slate-500">{description}</p>
+    </a>
+  );
 }
